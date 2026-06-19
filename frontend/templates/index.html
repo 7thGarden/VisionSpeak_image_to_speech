@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="home-layout">
+
+  <form action="/predict" method="POST" enctype="multipart/form-data" id="uploadForm" class="home-grid">
+
+    <!-- LEFT: Text + Actions -->
+    <div class="home-right">
+      <div class="hero-text">
+        <h1>Turn images<br><em>into words</em></h1>
+        <p class="subtitle">Upload any image and let AI describe it — as text, as audio, or both at once.</p>
+      </div>
+      <!-- Action Buttons -->
+      <div class="action-row">
+        <button type="submit" name="action" value="caption" class="btn btn-caption">
+          <span class="btn-icon">◎</span>
+          <span>Caption Only</span>
+        </button>
+        <button type="submit" name="action" value="voice" class="btn btn-voice">
+          <span class="btn-icon">♫</span>
+          <span>Voice Only</span>
+        </button>
+        <button type="submit" name="action" value="both" class="btn btn-both">
+          <span class="btn-icon">⚡</span>
+          <span>Caption + Voice</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Upload -->
+    <div class="home-left">
+      <p class="section-tag">① Upload</p>
+
+      <!-- Drop Zone -->
+      <label class="drop-zone" id="dropZone" for="fileInput">
+        <div class="drop-icon">⬆</div>
+        <p class="drop-primary">Drop your image here</p>
+        <p class="drop-secondary">or click to browse</p>
+        <input type="file" name="image" id="fileInput" accept="image/*" required hidden>
+      </label>
+
+      <!-- Preview -->
+      <div class="preview-wrap" id="previewWrap" style="display:none">
+        <img id="previewImg" src="" alt="Preview">
+        <button type="button" class="remove-btn" id="removeBtn">✕ Remove</button>
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const previewWrap = document.getElementById('previewWrap');
+  const previewImg = document.getElementById('previewImg');
+  const removeBtn = document.getElementById('removeBtn');
+
+  fileInput.addEventListener('change', showPreview);
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('dragging');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragging');
+    if (e.dataTransfer.files[0]) {
+      fileInput.files = e.dataTransfer.files;
+      showPreview();
+    }
+  });
+
+  function showPreview() {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    dropZone.style.display = 'none';
+    previewWrap.style.display = 'block';
+  }
+
+  removeBtn.addEventListener('click', () => {
+    fileInput.value = '';
+    previewImg.src = '';
+    previewWrap.style.display = 'none';
+    dropZone.style.display = 'flex';
+  });
+</script>
+{% endblock %}

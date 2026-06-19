@@ -1,0 +1,21 @@
+# --- Datasets ---
+LJSpeech-1.1/
+LJSpeech-1.1.tar.bz2
+
+# --- Model Weights & Checkpoints ---
+local_models/
+speecht5_finetuned_ljspeech/
+
+# --- Temporary & Environment Folders ---
+tmpdir/
+custom_img/
+.ipynb_checkpoints/
+__pycache__/
+
+# --- Evaluation Docs & Test Outputs ---
+eval.docx
+speech_outputs/
+output_audio.wav
+output_caption.txt
+output1.png
+sinewave_melspectrogram.jpg

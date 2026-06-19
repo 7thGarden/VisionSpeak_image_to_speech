@@ -1,0 +1,7 @@
+Flask
+torch1
+transformers
+speechbrain
+librosa
+soundfile
+Pillow

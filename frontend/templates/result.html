@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="result-page">
+
+  <div class="result-grid">
+
+    <!-- Left: Image -->
+    <div class="result-image-col">
+      <div class="result-label">Analysed Image</div>
+      <div class="result-img-wrap">
+        <img src="/static/uploads/{{ image }}" alt="Uploaded image">
+      </div>
+      <a href="/" class="back-btn">← Analyse another</a>
+    </div>
+
+    <!-- Right: Outputs -->
+    <div class="result-output-col">
+
+      {% if caption %}
+      <div class="output-card caption-card">
+        <div class="output-header">
+          <span class="output-icon">◎</span>
+          <span class="output-title">Generated Caption</span>
+        </div>
+        <p class="caption-text">{{ caption }}</p>
+        <button class="copy-btn" onclick="copyText('{{ caption }}')">Copy ↗</button>
+      </div>
+      {% endif %}
+
+      {% if audio %}
+      <div class="output-card audio-card">
+        <div class="output-header">
+          <span class="output-icon">♫</span>
+          <span class="output-title">Speech Output</span>
+        </div>
+        <div class="custom-player">
+          <audio id="audioPlayer" src="/static/audio/{{ audio }}"></audio>
+          <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+          <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+          </div>
+          <a href="/static/audio/{{ audio }}" download class="dl-btn">↓</a>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if not caption and not audio %}
+      <div class="output-card">
+        <p style="color:var(--muted)">No output was generated. Please go back and try again.</p>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</main>
+
+<script>
+  const audio = document.getElementById('audioPlayer');
+  const playBtn = document.getElementById('playBtn');
+  const progressFill = document.getElementById('progressFill');
+  const timeDisplay = document.getElementById('timeDisplay');
+
+  function togglePlay() {
+    if (audio.paused) { audio.play(); playBtn.textContent = '⏸'; }
+    else { audio.pause(); playBtn.textContent = '▶'; }
+  }
+
+  if (audio) {
+    audio.addEventListener('timeupdate', () => {
+      const pct = (audio.currentTime / audio.duration) * 100 || 0;
+      progressFill.style.width = pct + '%';
+      timeDisplay.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration || 0);
+    });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+  }
+
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  }
+
+  function copyText(t) {
+    navigator.clipboard.writeText(t).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = 'Copy ↗', 2000);
+    });
+  }
+</script>
+{% endblock %}

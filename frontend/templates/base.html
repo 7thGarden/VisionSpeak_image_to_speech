@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VisionSpeak — Image to Speech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="grain"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">VisionSpeak</span>
+      </div>
+      <span class="nav-tagline">AI Image Narration</span>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    <p>Powered by AI Vision + Speech Synthesis &nbsp;·&nbsp; VisionSpeak © 2025</p>
+  </footer>
+</body>
+</html>
